@@ -54,8 +54,8 @@ router.get('/', (req, res, next) => {
 
 //  http://localhost:3000/goods/addCart userId: 100005, productId: 100003
 router.post('/addCart', (req, res, next) => {
-    const {userId, productId} = req.body;
-    console.log(userId, productId);
+    const {productId} = req.body;
+    const {userId} = req.cookies;
     const arr = [User.findOne({userId}), Goods.findOne({productId})];
     Promise
     .all(arr)

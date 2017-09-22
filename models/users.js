@@ -16,7 +16,15 @@ const UserSchema = new Schema({
             productNum: String,
         }
     ],
-    addressList: Array,
+    addressList: [
+        {
+            contactPerson: String,
+            contactNumber: String,
+            contactAddress: String,
+            contactId: String,
+            isDefault: Number,
+        }
+    ],
 });
 
 module.exports = mongoose.model('User', UserSchema, 'users');
