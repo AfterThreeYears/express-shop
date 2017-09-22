@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
-mongoose.promise = global.promise;
+mongoose.Promise = global.Promise;
 const Goods = require('../models/goods');
 const User = require('../models/users');
 

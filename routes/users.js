@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
 const mongoose = require('mongoose');
-const User = require('../models/users');
 mongoose.Promise = global.Promise;
+const User = require('../models/users');
 
 router.get('/', function(req, res, next) {
   res.send('respond with a resource');
@@ -200,20 +200,18 @@ router.post('/add/address', (req, res) => {
       if (contactId) {
         let idx, curItem;
         doc.addressList.forEach((item, index) => {
-          console.log(item._id , contactId);
           if (`${item._id}` === `${contactId}`) {
-            idx = index;
-            curItem = item;
+            item.contactPerson = contactPerson;
+            item.contactNumber = contactNumber;
+            item.contactAddress = contactAddress;
+            item.isDefault = isDefault;
+            idx = index;            
+            curItem = item;            
           }
         });
         if (!curItem) {
           throw new Error('没有这个地址!');
-        }
-        curItem.contactPerson = contactPerson;
-        curItem.contactNumber = contactNumber;
-        curItem.contactAddress = contactAddress;
-        curItem.isDefault = isDefault;
-
+        }        
         doc.addressList[idx] = curItem;
       } else {
         doc.addressList.push({
@@ -236,6 +234,37 @@ router.post('/add/address', (req, res) => {
     })
   })
   .catch((err) => {
+    res.json({
+      status: 1,
+      msg: err.message,
+      data: null,
+    });
+  });
+});
+
+//  http://localhost:3000/users/del/address
+// {addressId: '59c4d77b7d2ad3117fb19988'}
+router.post('/del/address', (req, res) => {
+  const {userId} = req.cookies;
+  const {addressId} = req.body;
+  User.update({userId}, {
+    $pull: {
+      addressList: {
+        _id: addressId,
+      },
+    },
+  })
+  .then((doc) => {
+    if (doc && doc.nModified) {
+      res.json({
+        status: 0,
+        msg: '',
+        data: 'suc',
+      });
+    } else {
+      throw new Error('没有这个地址');
+    }
+  }).catch((err) => {
     res.json({
       status: 1,
       msg: err.message,
