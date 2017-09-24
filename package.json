@@ -4,13 +4,15 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "dev": "nodemon ./bin/www"
+    "dev": "cross-env NODE_ENV=dev nodemon ./bin/www",
+    "build": "pm2 restart ecosystem.config.js --env prod"
   },
   "dependencies": {
     "bcrypt": "^1.0.3",
     "body-parser": "^1.17.2",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.4",
+    "cross-env": "^5.0.5",
     "debug": "~2.6.3",
     "ejs": "^2.5.7",
     "express": "^4.15.4",
