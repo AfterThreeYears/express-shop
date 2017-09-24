@@ -1,49 +1,33 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 const mongoose = require('mongoose');
-mongoose.Promise = global.Promise;
+const path = require('path');
 const User = require('../models/users');
+const passport = require('passport');
+const {
+  registered,
+  login,
+  addressList,
+} = require(path.join(__dirname, '../controllers/users'));
+require(path.join(__dirname, '../util/passport'))();
+mongoose.Promise = global.Promise;
 
 router.get('/', function(req, res, next) {
-  // res.send('respond with a resource');
-  res.render('index');
+  res.send('respond with a resource');
 });
 
+// http://localhost:3000/users/registered userName: 巫妖王, userPwd: king
+router.post('/registered', registered),
+
+// http://localhost:3000/users/redirect 
 router.get('/redirect', function(req, res, next) {
   res.redirect('https://www.baidu.com');
 });
 
 // http://localhost:3000/users/login userName: 鬼剑士, userPwd: 665533
-router.post('/login', (req, res, next) => {
-  const {userName, userPwd} = req.body;
-  const params = {
-    userName,
-    userPwd,
-  };
-  User.findOne(params).then((doc) => {
-    if (doc) {
-      res.cookie('userId', doc.userId, {
-        // 一个小时
-        maxAge: 1000 * 60 * 60,
-        httpOnly: true,
-      });
-      res.json({
-        status: 0,
-        msg: '',
-        data: doc.userName,
-      });
-    } else {
-      throw new Error('密码或者用户名错误');
-    }
-  }).catch((err) => {
-    res.json({
-      status: 1,
-      msg: err.message,
-      data: null,
-    });
-  });
-});
+router.post('/login', login);
 
+  
 // http://localhost:3000/users/logout
 router.post('/logout', (req, res, next) => {
   res.cookie('userId', '', {
@@ -167,28 +151,7 @@ router.post('/cart/edit', (req, res) => {
 });
 
 // http://localhost:3000/users/addressList
-router.get('/addressList', (req, res, next) => {
-  console.log('addressList', req.cookies);
-  const {userId} = req.cookies;
-  User.findOne({userId})
-  .then((doc) => {
-    if (doc) {
-      res.json({
-        status: 0,
-        msg: '',
-        data: doc.addressList,
-      })
-    } else {
-      throw new Error('没有该用户');
-    }
-  }).catch((err) => {
-    res.json({
-      status: 1,
-      msg: err.message,
-      data: null,
-    });
-  })
-});
+router.get('/addressList', passport.authenticate('bearer', { session: false }), addressList);
 
 // http://localhost:3000/users/add/address 
 // {contactPerson: 'name', contactNumber: 'number', contactAddress: 'address', contactId: '59c4d5de9dd6940fe71771d7' isDefault: 1}
