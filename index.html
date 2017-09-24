@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+
+    function login() {
+        var headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        headers.append('x-node', 'node');
+        fetch('http://127.0.0.1:3000/users/login', {
+            method: 'POST',
+            credentials: 'include', 
+            headers: headers,
+            body: JSON.stringify({
+                userName: '鬼剑士',
+                userPwd: '665533',
+            })
+        });
+    }
+
+    function login1() {
+        var data = "userName=%E9%AC%BC%E5%89%91%E5%A3%AB&userPwd=665533";
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = false;
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                console.log(this.responseText);
+            }
+        });
+        xhr.open("POST", "http://127.0.0.1:3000/users/login");
+        xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded");
+        xhr.setRequestHeader("x-custom", "abcd");
+        xhr.send(data);
+    }
+    // login();
+    setTimeout(() => {
+        login();
+    }, 3000)
+
+  
+</script>
+</body>
+</html>

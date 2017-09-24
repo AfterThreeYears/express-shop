@@ -1,5 +1,7 @@
 var express = require('express');
 var path = require('path');
+var cors = require('cors');
+var ejs = require('ejs');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
@@ -15,30 +17,37 @@ var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+app.engine('html', ejs.__express);
+app.set('view engine', 'html');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(cors({
+    origin: 'http://127.0.0.1:8080',
+    credentials: true,
+}));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use((req, res, next) => {
-    if (req.cookies.userId) {
-        next();
-    } else {
-        if (whiteList.includes(req.path)) {
-            next();
-        } else {
-            res.json({
-                status: 100001,
-                msg: '请登录',
-                result: null,
-            });
-        }
-    }
-});
+// app.use((req, res, next) => {
+//     console.log('req.cookies.userId', req.cookies.userId);
+//     if (req.cookies.userId) {
+//         next();
+//     } else {
+//         if (whiteList.includes(req.path)) {
+//             next();
+//         } else {
+//             res.json({
+//                 status: 100001,
+//                 msg: '请登录',
+//                 result: null,
+//             });
+//         }
+//     }
+// });
 
 app.use('/', index);
 app.use('/users', users);

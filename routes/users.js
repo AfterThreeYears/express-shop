@@ -5,7 +5,12 @@ mongoose.Promise = global.Promise;
 const User = require('../models/users');
 
 router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+  // res.send('respond with a resource');
+  res.render('index');
+});
+
+router.get('/redirect', function(req, res, next) {
+  res.redirect('https://www.baidu.com');
 });
 
 // http://localhost:3000/users/login userName: 鬼剑士, userPwd: 665533
@@ -18,8 +23,9 @@ router.post('/login', (req, res, next) => {
   User.findOne(params).then((doc) => {
     if (doc) {
       res.cookie('userId', doc.userId, {
-        path: '/',
+        // 一个小时
         maxAge: 1000 * 60 * 60,
+        httpOnly: true,
       });
       res.json({
         status: 0,
@@ -162,6 +168,7 @@ router.post('/cart/edit', (req, res) => {
 
 // http://localhost:3000/users/addressList
 router.get('/addressList', (req, res, next) => {
+  console.log('addressList', req.cookies);
   const {userId} = req.cookies;
   User.findOne({userId})
   .then((doc) => {
