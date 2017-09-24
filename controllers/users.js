@@ -1,8 +1,10 @@
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
 mongoose.Promise = global.Promise;
 const path = require('path');
 const User = require(path.join(__dirname, '../models/users'));
 const {createToken} = require(path.join(__dirname, '../util/jwt'));
+const {secret, expiresIn} = require(path.join(__dirname, '../config'));
 
 const registered = (req, res, next) => {
     const {userName, userPwd} = req.body;

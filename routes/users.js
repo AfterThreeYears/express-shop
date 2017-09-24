@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const path = require('path');
 const User = require('../models/users');
 const passport = require('passport');
+const {checkToken} = require(path.join(__dirname, '../util/jwt'));
 const {
   registered,
   login,
@@ -151,7 +152,12 @@ router.post('/cart/edit', (req, res) => {
 });
 
 // http://localhost:3000/users/addressList
-router.get('/addressList', passport.authenticate('bearer', { session: false }), addressList);
+router.get(
+  '/addressList',
+  checkToken,  
+  passport.authenticate('bearer', { session: false }),
+  addressList
+);
 
 // http://localhost:3000/users/add/address 
 // {contactPerson: 'name', contactNumber: 'number', contactAddress: 'address', contactId: '59c4d5de9dd6940fe71771d7' isDefault: 1}
