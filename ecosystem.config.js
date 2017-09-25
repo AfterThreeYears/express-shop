@@ -12,10 +12,10 @@ module.exports = {
         interpreter_args: '--harmony-async-await',
         // exec_mode: 'cluster',
         env_dev: {
-          NODE_ENV: 'dev',
+          NODE_ENV: 'development',
         },
         env_prod: {
-          NODE_ENV: 'prod',
+          NODE_ENV: 'production',
         },
       },
     ],

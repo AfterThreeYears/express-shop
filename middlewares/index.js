@@ -4,6 +4,7 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const passport = require('passport');
+const compression = require('compression');
 const {corsConfig} = require('../config');
 
 module.exports = (app) => {
@@ -12,7 +13,7 @@ module.exports = (app) => {
     // app.set('view engine', 'jade');
     // app.engine('html', ejs.__express);
     // app.set('view engine', 'html');
-
+    app.use(compression());
     app.use(cors(corsConfig));
     app.use(logger('dev'));
     app.use(bodyParser.json());

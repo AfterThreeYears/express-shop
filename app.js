@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const errorHandler = require('errorHandler');
-const isProd = process.env.NODE_ENV === 'prod';
+const isProd = process.env.NODE_ENV === 'production';
 require('./db/mongodb');
 require(path.join(__dirname, './util/passport'))();
 

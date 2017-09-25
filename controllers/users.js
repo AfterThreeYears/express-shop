@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const path = require('path');
 const User = require(path.join(__dirname, '../models/users'));
 const {createToken} = require(path.join(__dirname, '../util/jwt'));
-const {secret, expiresIn, access_token_name} = require(path.join(__dirname, '../config'));
+const {secret, expiresIn, access_token_name, cookieMaxAge} = require(path.join(__dirname, '../config'));
 
 const registered = (req, res, next) => {
     const {userName, userPwd} = req.body;
@@ -58,7 +58,7 @@ const login = (req, res, next) => {
     .then((doc) => {
         res.cookie('access_token', doc.token, {
           // 一个小时
-          maxAge: 1000 * 60 * 60,
+          maxAge: cookieMaxAge,
           httpOnly: true,
         });
         res.json({
