@@ -91,7 +91,6 @@ const addressList = (req, res, next) => {
             data: req.user.addressList,
         });
     }
-
 };
 
 const index = function(req, res, next) {
@@ -111,8 +110,10 @@ const logout = (req, res, next) => {
 };
 
 const checkLogin = (req, res) => {
-    User.findOne({userId: req.cookies.userId})
+    const {access_token} = req.cookies;
+    User.findOne({token: access_token})
     .then((doc) => {
+      console.log(doc);
       if (doc) {
         res.json({
           status: 0,
@@ -132,8 +133,8 @@ const checkLogin = (req, res) => {
 };
 
 const cartList = (req, res) => {
-    const {userId} = req.cookies;
-    User.findOne({userId: `${userId}`})
+    const {access_token} = req.cookies;
+    User.findOne({token: access_token})
     .then((doc) => {
       if (doc) {
         res.json({
@@ -156,8 +157,8 @@ const cartList = (req, res) => {
 
 const cartDel = (req, res) => {
     const {productId} = req.body;
-    const {userId} = req.cookies;
-    User.update({userId}, {
+    const {access_token} = req.cookies;
+    User.update({token: access_token}, {
       $pull: {
         cartList: {
           productId,
@@ -186,9 +187,9 @@ const cartDel = (req, res) => {
 
 const cartEdit = (req, res) => {
     const {productNum, productId, checked} = req.body;
-    const {userId} = req.cookies;
+    const {access_token} = req.cookies;
     User.update({
-      userId,
+      token: access_token,
       'cartList.productId': productId,
     }, {
       'cartList.$.productNum': productNum,
@@ -222,8 +223,8 @@ const addAddress = (req, res) => {
       contactId,
       isDefault,
     } = req.body;
-    const {userId} = req.cookies;
-    User.findOne({userId})
+    const {access_token} = req.cookies;
+    User.findOne({token: access_token})
     .then((doc) => {
       if (doc) {
         if (contactId) {
@@ -272,9 +273,9 @@ const addAddress = (req, res) => {
 };
 
 const delAddress = (req, res) => {
-    const {userId} = req.cookies;
+    const {access_token} = req.cookies;
     const {addressId} = req.body;
-    User.update({userId}, {
+    User.update({token: access_token}, {
       $pull: {
         addressList: {
           _id: addressId,

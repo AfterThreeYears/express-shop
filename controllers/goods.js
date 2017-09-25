@@ -38,8 +38,8 @@ const index = (req, res, next) => {
 
 const addCart = (req, res, next) => {
     const {productId} = req.body;
-    const {userId} = req.cookies;
-    const arr = [User.findOne({userId}), Goods.findOne({productId})];
+    const {access_token} = req.cookies;
+    const arr = [User.findOne({token: access_token}), Goods.findOne({productId})];
     Promise
     .all(arr)
     .then(([userDoc, goodsDoc]) => {

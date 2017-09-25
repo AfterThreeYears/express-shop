@@ -4,8 +4,12 @@ module.exports = {
     // 密钥
     secret: 'sixsixsix',
     // 过期时间
-    expiresIn: '60s',
+    expiresIn: '2h',
     mongodbUri:  'mongodb://localhost:27017/test',
     // 设置cookie的名字
     access_token_name: 'access_token',
+    corsConfig: {
+        origin: 'http://127.0.0.1:8080',
+        credentials: true,
+    },
 };
