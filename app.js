@@ -6,7 +6,8 @@ require('./db/mongodb');
 require(path.join(__dirname, './util/passport'))();
 
 const app = express();
-
+const {appLog} = require('./util/logs');
+appLog.debug('express init');
 require('./middlewares')(app);
 require('./routes')(app);
 

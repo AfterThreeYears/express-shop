@@ -8,6 +8,8 @@ var app = require('../app');
 var debug = require('debug')('shop:server');
 var http = require('http');
 
+var {wwwLog} = require('../util/logs');
+
 /**
  * Get port from environment and store in Express.
  */
@@ -86,5 +88,5 @@ function onListening() {
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+    wwwLog.info('Listening on ' + bind);
 }
