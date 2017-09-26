@@ -11,7 +11,6 @@ appLog.debug('express init');
 require('./middlewares')(app);
 require('./routes')(app);
 
-// catch 404 and forward to error handler
 app.use(function(req, res, next) {
   const err = new Error('Not Found');
   err.status = 404;
