@@ -11,7 +11,7 @@ module.exports = {
     // 设置cookie的名字
     access_token_name: 'access_token',
     corsConfig: {
-        origin: 'http://127.0.0.1:8080',
+        origin: true,
         credentials: true,
     },
 };

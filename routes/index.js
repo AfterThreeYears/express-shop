@@ -2,10 +2,9 @@ var express = require('express');
 var router = express.Router();
 var Mock = require('../models/mocks');
 const {mockLog} = require('../util/logs');
-var httpProxy = require('http-proxy');
 
-router.post('/save', (req, res, next) => {
-  const {path, jsonStr} = req.body;
+router.post('/saveOrupdate', (req, res, next) => {
+  const {id, path, jsonStr} = req.body;
   let json;
   try {
     json = JSON.parse(jsonStr);
@@ -17,11 +16,34 @@ router.post('/save', (req, res, next) => {
       data: null,
     });
   }
-  const mock = new Mock({
-    path: `/proxy/${path}`,
-    jsonStr,
-  });
-  mock.save()
+  if (id) {
+    Mock
+    .update({"_id": id}, {path, jsonStr})
+    .then((doc) => {
+      mockLog.debug(`更新完成的结果, ${doc}`);
+      res.json({
+        errorCode: null,
+        errorMSG: '更新成功',
+        success: true,
+        data: true,
+      });
+    })
+    .catch((err) => {
+      mockLog.debug(`更新出错, ${err}`);
+      res.json({
+        errorCode: null,
+        errorMSG: err.message,
+        success: false,
+        data: null,
+      });
+    });
+  } else {
+    const mock = new Mock({
+      path: `${path}`,
+      jsonStr,
+    });
+    mock
+    .save()
     .then((doc) => {
       res.json({
         errorCode: null,
@@ -30,40 +52,40 @@ router.post('/save', (req, res, next) => {
         data: true,
       });
     })
-    .catch((error) => {
+    .catch((err) => {
+      mockLog.debug(`保存出错, ${err}`);
       res.json({
         errorCode: null,
         errorMSG: err.message,
         success: false,
         data: null,
       });
-    });
+    }); 
+  }
 });
 
-router.all('/**', function(req, res, next) {
-  
-  mockLog.debug(req.cookies);
-  mockLog.info(`req.originalUrl是 ${req.originalUrl}`);
-  Mock.findOne({path: req.originalUrl})
+router.get('/list', (req, res) => {
+  Mock
+  .find({})
   .then((doc) => {
     if (doc) {
-      res.json(JSON.parse(doc.jsonStr));
+      res.json({
+        errorCode: null,
+        errorMSG: '',
+        success: true,
+        data: doc,
+      });
     } else {
       res.json({
         errorCode: null,
-        errorMSG: '没有数据',
+        errorMSG: '没有接口列表',
         success: false,
         data: null,
       });
     }
   })
   .catch((err) => {
-    res.json({
-      errorCode: null,
-      errorMSG: err.message,
-      success: false,
-      data: null,
-    });
+    mockLog.debug(`获取接口列表出错, ${err}`);
   });
 });
 
