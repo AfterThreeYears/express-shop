@@ -2,8 +2,9 @@ var express = require('express');
 var router = express.Router();
 var Mock = require('../models/mocks');
 const {mockLog} = require('../util/logs');
+const {Authentication} = require('../auth/auth.service');
 
-router.post('/saveOrupdate', (req, res, next) => {
+router.post('/saveOrupdate', Authentication(), (req, res, next) => {
   const {id, path, jsonStr} = req.body;
   let json;
   try {
@@ -64,7 +65,7 @@ router.post('/saveOrupdate', (req, res, next) => {
   }
 });
 
-router.get('/list', (req, res) => {
+router.get('/list', Authentication(), (req, res) => {
   Mock
   .find({})
   .then((doc) => {
@@ -86,6 +87,32 @@ router.get('/list', (req, res) => {
   })
   .catch((err) => {
     mockLog.debug(`获取接口列表出错, ${err}`);
+  });
+});
+
+router.get('/detail', (req, res) => {
+  const {id} = req.query;
+  Mock
+  .findOne({'_id': id})
+  .then((doc) => {
+    if (doc) {
+      res.json({
+        errorCode: null,
+        errorMSG: '',
+        success: true,
+        data: doc,
+      });
+    } else {
+      res.json({
+        errorCode: null,
+        errorMSG: '没有这个接口',
+        success: false,
+        data: null,
+      });
+    }
+  })
+  .catch((err) => {
+    mockLog.debug(`查找接口出错, ${err}`);
   });
 });
 

@@ -18,6 +18,6 @@ module.exports = (app) => {
     app.use(cookieParser());
     app.engine('html', ejs.__express);
     app.set('view engine', 'html');
-    app.use('/public', express.static('public'));
+    app.use(express.static('public'));
     app.use(proxy());
 };

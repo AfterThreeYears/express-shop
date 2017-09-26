@@ -59,7 +59,7 @@ const login = (req, res, next) => {
         res.cookie('access_token', doc.token, {
           // 一个小时
           maxAge: cookieMaxAge,
-          httpOnly: true,
+          httpOnly: false,
         });
         res.json({
           status: 0,

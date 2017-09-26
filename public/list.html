@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <a href="/edit.html">创建接口</a>
+        <ul>
+            <li v-for="(item, index) in list">
+                <p>名称： {{item.path}}</p>
+                <p>数据： {{item.jsonStr}}</p>
+                <a :href="combineHref(item._id)">编辑</a>
+                <br />
+            </li>
+        </ul>
+    </div>
+    <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>    
+    <script src="https://cdn.bootcss.com/vue/2.4.2/vue.min.js"></script>
+    <script src="https://cdn.bootcss.com/js-cookie/latest/js.cookie.js"></script>
+ <script>
+        new Vue({
+            el: '#app',
+            data() {
+                return {
+                   list: [],
+                };
+            },
+            methods: {
+                fetch() {
+                    var settings = {
+                        "url": "/api/list",
+                        "method": "GET",
+                        "headers": {
+                            authorization: `Bearer ${Cookies.get('access_token')}`,
+                        }
+                    }
+
+                    $.ajax(settings)
+                    .then(({data}) => {
+                        this.list = data;
+                    })
+                    .fail((err) => {
+                        alert(err.message);
+                    });
+                },
+                combineHref(id) {
+                    return `edit.html?id=${id}`;
+                },
+            },
+            mounted() {
+                this.fetch();
+            },
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>edit</title>
+</head>
+<body>
+    <div id="app">
+        <div>
+          接口地址:
+          <textarea cols="200" rows="6" v-model="data.path"></textarea>
+        </div>
+        <div>
+          接口详细:  
+          <textarea cols="200" rows="22" v-model="data.jsonStr"></textarea>
+        </div>
+        <button @click="save">保存</button>
+    </div>
+    <script src="https://cdn.bootcss.com/vue/2.4.2/vue.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/js-cookie/latest/js.cookie.min.js"></script>    
+    <script>
+        new Vue({
+            el: '#app',
+            data() {
+                return {
+                    id: '',
+                    data: {},
+                };
+            },
+            methods: {
+                fetchDetail() {
+                    var settings = {
+                        "url": `/api/detail?id=${this.id}`,
+                        "method": "GET",
+                        "headers": {
+                            authorization: `Bearer ${Cookies.get('access_token')}`,
+                        },
+                    };
+                    $.ajax(settings)
+                    .then((doc) => {
+                        if (doc.success) {
+                          this.data = doc.data;
+                        } else {
+                          alert(doc.msg);
+                        }
+                    })
+                    .fail((err) => {
+                        alert(err.message);
+                    });
+                },
+                save() {
+                  var settings = {
+                    "url": "/api/saveOrupdate",
+                    "method": "POST",
+                    "headers": {
+                      "content-type": "application/x-www-form-urlencoded",
+                      "authorization": `Bearer ${Cookies.get('access_token')}`,
+                    },
+                    "data": {
+                      "path": this.data.path,
+                      "jsonStr": this.data.jsonStr,
+                    },
+                  };
+
+                  $.ajax(settings)
+                  .done((doc) => {
+                    if (doc.success) {
+                      alert('保存成功');
+                      location.href = '/list.html';
+                    } else {
+                      alert(doc.errorMSG);
+                    }
+                  })
+                  .fail((err) => {
+                    alert(err.message);
+                  });
+                },
+            },
+            mounted() {
+                this.id = new URL(location.href).searchParams.get('id');
+                if (this.id) {
+                   this.fetchDetail();
+                }
+            },
+        });
+    </script>
+</body>
+</html>

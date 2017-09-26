@@ -12,6 +12,6 @@ const {
 router.get('/', index);
 
 //  http://localhost:3000/goods/addCart userId: 100005, productId: 100003
-router.post('/addCart', Authentication, addCart);
+router.post('/addCart', Authentication(), addCart);
 
 module.exports = router;

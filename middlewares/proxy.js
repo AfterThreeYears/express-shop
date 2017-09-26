@@ -31,7 +31,7 @@ function proxy() {
         appLog.info('req.originalUrl --- ', req.originalUrl);     
         appLog.debug('cookie is', req.cookies);        
         if (req.originalUrl.indexOf('mock-cms') > -1) {
-            const path = req.originalUrl.replace(/\/proxy\/mock-cms\//, "");
+            const path = req.originalUrl.replace(/(\/proxy\/mock-cms\/)|(\/mock-cms\/)/, "");
             Mock.findOne({path})
             .then((doc) => {
               if (doc) {
