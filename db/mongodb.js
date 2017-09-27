@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
+const {mongodbUri} = require('../config');
 
-mongoose.connect('mongodb://localhost/db_demo')
+mongoose.connect(mongodbUri)
 .then(() => {
     console.log('MongoDB connectd!');
 })

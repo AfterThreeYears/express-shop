@@ -40,8 +40,13 @@
                     }
 
                     $.ajax(settings)
-                    .then(({data}) => {
-                        this.list = data;
+                    .then(({data, msg, status}) => {
+                        if (status) {
+                            alert(msg);
+                            location.href = '/index.html';
+                        } else {
+                            this.list = data;
+                        }
                     })
                     .fail((err) => {
                         alert(err.message);

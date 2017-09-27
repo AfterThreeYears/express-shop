@@ -90,7 +90,7 @@ router.get('/list', Authentication(), (req, res) => {
   });
 });
 
-router.get('/detail', (req, res) => {
+router.get('/detail', Authentication(), (req, res) => {
   const {id} = req.query;
   Mock
   .findOne({'_id': id})
