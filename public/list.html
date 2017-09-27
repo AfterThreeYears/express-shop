@@ -14,6 +14,8 @@
                 <p>名称： {{item.path}}</p>
                 <p>数据： {{item.jsonStr}}</p>
                 <a :href="combineHref(item._id)">编辑</a>
+                <a :href="combineApi(item.path)">查看接口</a>
+                <button @click="deleteApi(item._id)">删除接口</button>
                 <br />
             </li>
         </ul>
@@ -54,6 +56,35 @@
                 },
                 combineHref(id) {
                     return `edit.html?id=${id}`;
+                },
+                combineApi(path) {
+                    return `x-mock-cms/${path}`;
+                },
+                deleteApi(id) {
+                    var settings = {
+                        "url": "/api/delete",
+                        "method": "POST",
+                        "headers": {
+                          "content-type": "application/x-www-form-urlencoded",
+                          authorization: `Bearer ${Cookies.get('access_token')}`,
+                        },
+                        "data": {
+                          id,
+                        },
+                    };
+                      
+                    $.ajax(settings)
+                    .then(({success, errorMSG}) => {
+                        if (success) {
+                            alert('删除成功');
+                            location.reload();
+                        } else {
+                            alert(`删除失败 ${errorMSG}`);
+                        }
+                    })
+                    .fail((error) => {
+                        alert(error.message);
+                    });
                 },
             },
             mounted() {

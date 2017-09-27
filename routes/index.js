@@ -116,4 +116,45 @@ router.get('/detail', Authentication(), (req, res) => {
   });
 });
 
+router.post('/delete', Authentication(), (req, res, next) => {
+  const {id} = req.body;
+  const {authorization} = req.get('authorization');
+  if (id) {
+    Mock.findByIdAndRemove({'_id': id})
+    .then((doc) => {
+      if (doc) {
+        mockLog.info(`${new Date}  用户: ${authorization} 删除了 ${doc.path}接口`);        
+        res.json({
+          errorCode: null,
+          errorMSG: '删除成功',
+          success: true,
+          data: true,
+        });
+      } else {
+        res.json({
+          errorCode: null,
+          errorMSG: `该接口已经删除--${doc}`,
+          success: false,
+          data: null,
+        });
+      }
+    })
+    .catch((error) => {
+      res.json({
+        errorCode: null,
+        errorMSG: `出错 -- ${error.message}`,
+        success: false,
+        data: null,
+      });
+    });
+  } else {
+    res.json({
+      errorCode: null,
+      errorMSG: '没有id',
+      success: false,
+      data: null,
+    });
+  }
+});
+
 module.exports = router;

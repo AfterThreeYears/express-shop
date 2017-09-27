@@ -29,9 +29,10 @@ const Mock = require('../models/mocks');
 function proxy() {
     return (req, res, next) => {
         appLog.info('req.originalUrl --- ', req.originalUrl);     
-        appLog.debug('cookie is', req.cookies);        
-        if (req.originalUrl.indexOf('mock-cms') > -1) {
-            const path = req.originalUrl.replace(/(\/proxy\/mock-cms\/)|(\/mock-cms\/)/, "");
+        appLog.debug('cookie is', req.cookies);   
+        const reg = /^(\/x-mock-cms\/)/;
+        if (reg.test(req.originalUrl)) {     
+            const path = req.originalUrl.replace(reg, "");
             Mock.findOne({path})
             .then((doc) => {
               if (doc) {
