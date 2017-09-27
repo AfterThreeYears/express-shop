@@ -9,12 +9,11 @@ module.exports = {
         script: 'bin/www',
         // watch: true,
         // instances: 4,
-        interpreter_args: '--harmony-async-await',
         // exec_mode: 'cluster',
-        env_dev: {
+        env_development: {
           NODE_ENV: 'development',
         },
-        env_prod: {
+        env_production: {
           NODE_ENV: 'production',
         },
       },
