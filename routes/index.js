@@ -10,7 +10,7 @@ router.post('/saveOrupdate', Authentication(), (req, res, next) => {
   try {
     json = JSON.parse(jsonStr);
   } catch (error) {
-    res.json({
+    return res.json({
       errorCode: null,
       errorMSG: 'json解析错误',
       success: false,
