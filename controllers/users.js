@@ -5,13 +5,20 @@ const {createToken} = require(path.join(__dirname, '../util/jwt'));
 const {secret, expiresIn, access_token_name, cookieMaxAge} = require(path.join(__dirname, '../config'));
 
 const registered = (req, res, next) => {
-    const {userName, userPwd} = req.body;
+    const {userName, userPwd, key} = req.body;
     if (!userName || !userPwd) {
-        res.json({
+        return res.json({
             status: 1,
             msg: '请输入账号或者密码',
             data: null,
         });
+    }
+    if (key !== 'nodejs') {
+      return res.json({
+          status: 1,
+          msg: 'key是必须的',
+          data: null,
+      });
     }
     const user = new User({
         userName,

@@ -7,10 +7,12 @@
     <title>Document</title>
 </head>
 <body>
+    注册
     <div id="app">
         <input type="text" v-model="userName" placeholder="用户名" />
         <input type="password" v-model="userPwd" placeholder="密码" />
-        <button @click="fetch">登录</button>
+        <input type="text" v-model="key" placeholder="key" />
+        <button @click="fetch">注册</button>
     </div>
     <script src="https://cdn.bootcss.com/vue/2.4.2/vue.min.js"></script>
     <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
@@ -22,33 +24,36 @@
                 return {
                     userName: '',
                     userPwd: '',
+                    key: '',
                 };
             },
             methods: {
                 fetch() {
                     var settings = {
-                        "url": "/users/login",
+                        "url": "/users/registered",
                         "method": "POST",
                         "headers": {
-                            "content-type": "application/x-www-form-urlencoded",
+                          "content-type": "application/x-www-form-urlencoded",
                         },
                         "data": {
-                            "userName": this.userName,
-                            "userPwd": this.userPwd,
-                        },
-                    };
-                      
-                    $.ajax(settings)
-                    .then(function (data) {
-                        if (data.status) {
-                            alert(data.msg);
-                        } else {
-                            location.href = '/list.html';
+                          userName: this.userName,
+                          userPwd: this.userPwd,
+                          key: this.key,
                         }
-                    })
-                    .fail((err) => {
+                      }
+                      
+                      $.ajax(settings)
+                      .then(function (data) {
+                        if (data.status) {
+                          alert(data.msg);
+                        } else {
+                          alert('注册成功');  
+                          location.href = '/index.html';
+                        }
+                      })
+                      .fail((err) => {
                         alert(err.message);
-                    });
+                      });
                 },
             },
         });
