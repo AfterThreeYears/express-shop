@@ -64,6 +64,11 @@
                     },
                   };
 
+                  const id = new URL(location.href).searchParams.get('id');
+                  if (id) {
+                    settings.data.id = id;
+                  }
+
                   $.ajax(settings)
                   .done((doc) => {
                     if (doc.success) {
