@@ -9,7 +9,6 @@ const createToken = (name) => {
 };
 
 const checkToken = (req, res, next) => {
-    console.log('qq');
     const {access_token} = req.cookies;
     if (!access_token) {
         return res.json({

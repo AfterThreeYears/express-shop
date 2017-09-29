@@ -118,7 +118,7 @@ router.get('/detail', Authentication(), (req, res) => {
 
 router.post('/delete', Authentication(), (req, res, next) => {
   const {id} = req.body;
-  const {authorization} = req.get('authorization');
+  const authorization = req.get('authorization').replace(/^Bearer\s/, '');
   if (id) {
     Mock.findByIdAndRemove({'_id': id})
     .then((doc) => {
