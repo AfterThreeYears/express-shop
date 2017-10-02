@@ -10,6 +10,8 @@
     <div id="app">
         <input type="text" v-model="userName" placeholder="用户名" />
         <input type="password" v-model="userPwd" placeholder="密码" />
+        <img width="100" height="20" src="/users/getVerifyCode" alt="" />
+        <input type="text" v-model="verifyCode" placeholder="验证码" />
         <button @click="fetch">登录</button>
     </div>
     <script src="https://cdn.bootcss.com/vue/2.4.2/vue.min.js"></script>
@@ -22,19 +24,21 @@
                 return {
                     userName: '',
                     userPwd: '',
+                    verifyCode: '',
                 };
             },
             methods: {
                 fetch() {
                     var settings = {
-                        "url": "/users/login",
-                        "method": "POST",
-                        "headers": {
+                        url: "/users/login",
+                        method: "POST",
+                        headers: {
                             "content-type": "application/x-www-form-urlencoded",
                         },
-                        "data": {
-                            "userName": this.userName,
-                            "userPwd": this.userPwd,
+                        data: {
+                            userName: this.userName,
+                            userPwd: this.userPwd,
+                            verifyCode: this.verifyCode,
                         },
                     };
                       
@@ -51,6 +55,9 @@
                     });
                 },
             },
+            mounted() {
+              
+            }
         });
     </script>
 </body>

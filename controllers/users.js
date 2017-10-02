@@ -3,6 +3,7 @@ const path = require('path');
 const User = require(path.join(__dirname, '../models/users'));
 const {createToken} = require(path.join(__dirname, '../util/jwt'));
 const {secret, expiresIn, access_token_name, cookieMaxAge} = require(path.join(__dirname, '../config'));
+const ccap = require('ccap');
 
 const registered = (req, res, next) => {
     const {userName, userPwd, key} = req.body;
@@ -75,12 +76,23 @@ const login = (req, res, next) => {
         });
     })
     .catch((err) => {
+      // 每一次失败以后都必须要去重新请求验证码
+      req.session.verifyCode = '';
       res.json({
         status: 1,
         msg: err.message,
         data: null,
       });
     });
+};
+
+const getVerifyCode = (req, res) => {
+  const captcha = ccap();
+  const ary = captcha.get();
+  const text = ary[0];
+  req.session.verifyCode = text;
+  const buffer = ary[1];
+  res.end(buffer);
 };
 
 const addressList = (req, res, next) => {
@@ -311,6 +323,7 @@ const delAddress = (req, res) => {
 module.exports = {
     registered,
     login,
+    getVerifyCode,
     addressList,
     index,
     logout,

@@ -3,10 +3,12 @@ const router = express.Router();
 const path = require('path');
 const User = require('../models/users');
 const {Authentication} = require('../auth/auth.service');
+const checkVerifyCode = require('../middlewares/checkVerifyCode');
 const {
   index,
   registered,
   login,
+  getVerifyCode,
   addressList,
   logout,
   checkLogin,
@@ -23,10 +25,11 @@ router.get('/', index);
 router.post('/registered', registered),
 
 // http://localhost:3000/users/login userName: 鬼剑士, userPwd: 665533
-router.post('/login', login);
+router.post('/login', checkVerifyCode, login);
   
+router.get('/getVerifyCode', getVerifyCode);
 // http://localhost:3000/users/logout
-router.post('/logout', logout);
+router.post('/logout',logout);
 
 // http://localhost:3000/users/checkLogin
 router.get('/checkLogin', Authentication(), checkLogin);
