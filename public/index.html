@@ -10,8 +10,13 @@
     <div id="app">
         <input type="text" v-model="userName" placeholder="用户名" />
         <input type="password" v-model="userPwd" placeholder="密码" />
-        <img width="100" height="20" src="/users/getVerifyCode" alt="" />
-        <input type="text" v-model="verifyCode" placeholder="验证码" />
+        <img 
+            width="100"
+            height="20"
+            :src="url"
+            @click="getVerifyCode"
+        />
+        <input type="text" v-model="verifyCode" placeholder="验证码(不区分大小写)" />
         <button @click="fetch">登录</button>
     </div>
     <script src="https://cdn.bootcss.com/vue/2.4.2/vue.min.js"></script>
@@ -25,6 +30,7 @@
                     userName: '',
                     userPwd: '',
                     verifyCode: '',
+                    url: `/users/getVerifyCode?t=${Date.now()}`,
                 };
             },
             methods: {
@@ -43,16 +49,21 @@
                     };
                       
                     $.ajax(settings)
-                    .then(function (data) {
+                    .then((data) => {
                         if (data.status) {
+                            this.getVerifyCode();
                             alert(data.msg);
                         } else {
                             location.href = '/list.html';
                         }
                     })
                     .fail((err) => {
+                        this.getVerifyCode();
                         alert(err.message);
                     });
+                },
+                getVerifyCode() {
+                    this.url = `/users/getVerifyCode?t=${Date.now()}`;
                 },
             },
             mounted() {
