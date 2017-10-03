@@ -16,14 +16,12 @@ module.exports = (app) => {
     app.use(compression());
     app.use(cors(corsConfig));
     app.use(logger('dev'));
-    app.use(expressSession(
-        {
-            store: new RedisStore({client: redisClient}),
-            resave: false,
-            secret: 'wbb',
-            saveUninitialized: false
-        }
-    ));
+    app.use(expressSession({
+        store: new RedisStore({client: redisClient}),
+        resave: false,
+        secret: 'wbb',
+        saveUninitialized: false,
+    }));
     app.use(bodyParser.json({limit: '50mb'}));
     app.use(bodyParser.urlencoded({limit: '50mb', extended: false}));
     app.use(cookieParser());
