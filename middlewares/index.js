@@ -15,7 +15,7 @@ const redisClient = require('../db/redis');
 module.exports = (app) => {
     app.use(compression());
     app.use(cors(corsConfig));
-    app.use(logger('dev'));
+    // app.use(logger('dev'));
     app.use(expressSession({
         store: new RedisStore({client: redisClient}),
         resave: false,

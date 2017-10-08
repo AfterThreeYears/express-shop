@@ -44,7 +44,6 @@ const UserSchema = new Schema({
 // 密码加盐 所以更新密码的时候要去调用save，不能使用update
 UserSchema.pre('save', function(next) {
     const user = this;
-     console.log('user.isModified', user.isModified('userPwd')); 
     if (!user.isModified('userPwd')) return next();
 
     // 加盐

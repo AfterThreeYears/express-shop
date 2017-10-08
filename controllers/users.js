@@ -113,7 +113,9 @@ const addressList = (req, res, next) => {
 };
 
 const index = function(req, res, next) {
-    res.send('respond with a resource');
+    res.json({
+      msg: 'hello',
+    });
 };
 
 const logout = (req, res, next) => {
@@ -132,7 +134,6 @@ const checkLogin = (req, res) => {
     const {access_token} = req.cookies;
     User.findOne({token: access_token})
     .then((doc) => {
-      console.log(doc);
       if (doc) {
         res.json({
           status: 0,
@@ -245,29 +246,27 @@ const addAddress = (req, res) => {
     const {access_token} = req.cookies;
     User.findOne({token: access_token})
     .then((doc) => {
+      if (!contactPerson) throw new Error('没有收件人');
+      if (!contactNumber) throw new Error('没有电话');
+      if (!contactAddress) throw new Error('没有地址');
       if (doc) {
         if (contactId) {
-          let idx, curItem;
-          doc.addressList.forEach((item, index) => {
-            if (`${item._id}` === `${contactId}`) {
-              item.contactPerson = contactPerson;
-              item.contactNumber = contactNumber;
-              item.contactAddress = contactAddress;
-              item.isDefault = isDefault;
-              idx = index;            
-              curItem = item;            
-            }
-          });
-          if (!curItem) {
+          const index = doc.addressList.findIndex((item) => `${item._id}` === `${contactId}`);
+          if (index === -1) {
             throw new Error('没有这个地址!');
-          }        
-          doc.addressList[idx] = curItem;
+          }
+          doc.addressList[index] = Object.assign(doc.addressList[index], {
+            contactPerson,
+            contactNumber,
+            contactAddress,
+            isDefault: isDefault || 0,
+          });
         } else {
           doc.addressList.push({
             contactPerson,
             contactNumber,
             contactAddress,
-            isDefault,
+            isDefault: isDefault || 0,
           });
         }
         return doc.save();
@@ -279,7 +278,7 @@ const addAddress = (req, res) => {
       res.json({
         status: 0,
         msg: '',
-        data: 'suc',
+        data: doc.addressList.shift(),
       })
     })
     .catch((err) => {
@@ -293,11 +292,11 @@ const addAddress = (req, res) => {
 
 const delAddress = (req, res) => {
     const {access_token} = req.cookies;
-    const {addressId} = req.body;
+    const {contactId} = req.body;
     User.update({token: access_token}, {
       $pull: {
         addressList: {
-          _id: addressId,
+          _id: contactId,
         },
       },
     })

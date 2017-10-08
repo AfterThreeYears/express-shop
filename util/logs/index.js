@@ -1,9 +1,10 @@
 var log4js = require('log4js');
 const isProd = process.env.NODE_ENV === 'prodction';
+const isTest = process.env.NODE_ENV === 'test';
 const out = ['out'];
 
 const combine = (arr) => {
-    if (isProd) {
+    if (isProd || isTest) {
         return arr;
     } else {
         return [...arr, ...out];
