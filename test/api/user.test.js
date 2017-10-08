@@ -4,7 +4,7 @@ const should = require("should");
 const authHelper = require('../middlewares/authHelper');
 
 describe('test/api/user.test.js', () => {
-  let token, mockNickname, contactId;
+  let token, contactId;
   before((done) => {
     authHelper.createUser()
     .then((user) => {

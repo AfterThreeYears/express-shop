@@ -6,6 +6,19 @@ const {Authentication} = require('../auth/auth.service');
 
 router.post('/saveOrupdate', Authentication(), (req, res, next) => {
   const {id, path, jsonStr} = req.body;
+  if (!path) return res.json({
+    errorCode: null,
+    errorMSG: '没有path',
+    success: false,
+    data: null,
+  });
+  if (!jsonStr) return res.json({
+    errorCode: null,
+    errorMSG: '没有jsonStr',
+    success: false,
+    data: null,
+  });  
+
   let json;
   try {
     json = JSON.parse(jsonStr);
@@ -50,7 +63,7 @@ router.post('/saveOrupdate', Authentication(), (req, res, next) => {
         errorCode: null,
         errorMSG: '保存成功',
         success: true,
-        data: true,
+        data: doc._id,
       });
     })
     .catch((err) => {
