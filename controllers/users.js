@@ -64,8 +64,7 @@ const login = (req, res, next) => {
         }
     })
     .then((doc) => {
-        res.cookie('access_token', doc.token, {
-          // 一个小时
+        res.cookie(access_token_name, doc.token, {
           maxAge: cookieMaxAge,
           httpOnly: false,
         });

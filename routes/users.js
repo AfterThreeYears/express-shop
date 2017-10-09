@@ -25,7 +25,7 @@ router.get('/', index);
 router.post('/registered', registered),
 
 // http://localhost:3000/users/login userName: 鬼剑士, userPwd: 665533 // checkVerifyCode
-router.post('/login', login);
+router.post('/login', checkVerifyCode, login);
   
 router.get('/getVerifyCode', getVerifyCode);
 // http://localhost:3000/users/logout
