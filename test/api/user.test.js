@@ -23,6 +23,12 @@ describe('test/api/user.test.js', () => {
       done(err);
     });
   });
+  after(function (done) {
+    done();
+    setTimeout(() => {
+      process.exit(0);
+    }, 1000);
+  });
 
   describe('get /users', () => {
     // 访问 /users，登录用户和非登录用户都会得到相同的结果，所以不需要区别对待
